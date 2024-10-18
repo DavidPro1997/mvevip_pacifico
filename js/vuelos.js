@@ -33,7 +33,6 @@ function armarArrayFechas(fechas,tipo){
         let dato = {
             id: element.id,
             fecha : element.salida,
-            precio: element.precio
         }
         fechasGlobales.push(dato)
         fechasDisponibles[element.salida] = "$"+ Math.ceil(element.precio.porPersona.valor)
@@ -43,7 +42,6 @@ function armarArrayFechas(fechas,tipo){
     const fechaFin = fechas[fechas.length -1 ].salida
     const fechasNoIncluidas = obtenerFechasNoIncluidas(fechaInicio,fechaFin,disponibles)
     iniciarCalendario(fechaInicio,fechaFin,fechasDisponibles, fechasNoIncluidas,tipo)
-    ponerCosto()
 }
 
 
@@ -145,7 +143,6 @@ function cargarPersonas() {
     var total = parseInt(adultos,10) + parseInt(ninos) + parseInt(bebes)
     document.getElementById("personas").value = total+" PERSONA(S)"
     cerrarDropdown("dropdownPersonasContent")
-    ponerCosto()
 }
 
 function validarRango(input) {
@@ -184,7 +181,10 @@ function armarArrayDatos(){
         "apellidos": document.getElementById("apellidos").value,
         "nombres": document.getElementById("nombres").value,
         "email": document.getElementById("correo").value,
-        "celular": document.getElementById("celular").value
+        "celular": document.getElementById("celular").value,
+        "adultos": personas.adultos,
+        "ninos": personas.ninos,
+        "infantes": personas.infante
     }
     return datos
 }
@@ -197,7 +197,8 @@ function recibirCotizacion(){
     const date = armarArrayDatos()
     Enviar(JSON.stringify(date), 'leads/consulta-itinerario/'+objeto.id, datos => {
         if (datos.estado) {
-            $("#detalle").html(datos.consulta.detalle)
+            ponerCosto(datos.consulta.precio)
+            armarVuelos(datos.consulta.origen, datos.consulta.destino,datos.consulta.salida,datos.consulta.retorno)
             Swal.fire({
                 icon: 'success',
                 title: 'Bien',
@@ -218,11 +219,8 @@ function recibirCotizacion(){
 
 
 
-function ponerCosto(){
-    const fechaBuscada = document.getElementById("fechaSalida").value
-    let objeto = fechasGlobales.find(item => item.fecha === fechaBuscada);
+function ponerCosto(precio){
     let lista = ""
-    let total = 0
     lista += `
             <li class="table-header clearfix">
                 <div class="col">
@@ -232,43 +230,40 @@ function ponerCosto(){
                     <strong>Total</strong>
                 </div>
             </li>`
-            if(personas.adultos > 0){
-                total = total + objeto.precio.adulto.valor
+            if(precio.adulto.valor > 0){
                 lista += `
                     <li class="clearfix">
                         <div class="col" style="text-transform:none;">
                             <img src="img/products/thumb-1.jpg" width="50" height="50" alt=""> `+personas.adultos+` Adulto(s)
                         </div>
                         <div class="col second">
-                            $`+objeto.precio.adulto.valor.toFixed(2)+`
+                            $`+precio.adulto.valor.toFixed(2)+`
                         </div>
                     </li>
                 `
 
             }
-            if(personas.ninos > 0){
-                total = total + objeto.precio.nino.valor
+            if(precio.nino.valor > 0){
                 lista += `
                     <li class="clearfix">
                         <div class="col" style="text-transform:none;">
                             <img src="img/products/thumb-1.jpg" width="50" height="50" alt=""> `+personas.ninos+` Niño(s)
                         </div>
                         <div class="col second">
-                            $`+objeto.precio.nino.valor.toFixed(2)+`
+                            $`+precio.nino.valor.toFixed(2)+`
                         </div>
                     </li>
                 `
 
             }
-            if(personas.infante > 0){
-                total = total + objeto.precio.infante.valor
+            if(precio.infante > 0){
                 lista += `
                     <li class="clearfix">
                         <div class="col" style="text-transform:none;">
                             <img src="img/products/thumb-1.jpg" width="50" height="50" alt=""> `+personas.infante+` Infante(s)
                         </div>
                         <div class="col second">
-                            $`+objeto.precio.infante.valor.toFixed(2)+`
+                            $`+precio.infante.valor.toFixed(2)+`
                         </div>
                     </li>
                 `
@@ -280,9 +275,229 @@ function ponerCosto(){
                         <strong>Total</strong>
                     </div>
                     <div class="col second">
-                        <strong>$`+total.toFixed(2)+`</strong>
+                        <strong>$`+precio.totalPaquete.valor.toFixed(2)+`</strong>
                     </div>
                 </li>
     `
     $("#costos").html(lista)
+}
+
+
+function armarVuelos(origen, destino, salida, retorno){
+    const aux = 156
+    let lista = ""
+        lista += `
+            <div class="strip_all_tour_list wow fadeIn" data-wow-delay="0.1s">
+                <div class="row">
+                        <div class="row my-1 mx-1">
+                            <div class="col-lg-6 d-flex" style="align-items: center;">
+                                <img src="`+sacarLogoAereolina("2K")+`" style=" margin-right: 15px;" alt="" height="30" width="30">
+                                <small class="small-text" style="font-size: 1rem; align-items: center; display: flex;">Avianca</small>
+                            </div>
+                            <div class="col-lg-6" style="text-align: end; justify-content: end; display: flex; flex-direction: column;">
+                                <span>`+origen.nombre+`-`+destino.nombre+`</span>
+                                <span>`+destino.nombre+`-`+origen.nombre+`</span>
+                            </div>
+                        </div>
+                  
+                    <div>
+                        <div class="row d-flex">
+                            <div class="col-12">
+                                <div class="row mx-2">
+                                    <div class="col-12" style="display: flex; align-items: center;">
+                                        <i class="icon-plane" style="transform: rotate(45deg); margin-right: 10px; font-size: 20px;"></i>
+                                        <h5 style="margin-right: 20px; font-size: 16px;">IDA</h5>
+                                        <h5 style="font-size: 16px;"> `+salida.fecha+`</h5>
+                                    </div>
+                                </div>
+                                        <hr style="margin-top: 0; margin-bottom: 0;">
+                                        <div class="row mx-1" style="align-items: center;">
+                                            <div class="col-1">
+                                                
+                                            </div>
+                                            <div class="col-4">
+                                                <span>
+                                                    <strong>`+salida.escalas[0].desde+`</strong>
+                                                    <i class="icon-left" style="font-size: 22px;"></i>
+                                                    <strong>`+salida.escalas[salida.escalas.length-1].hasta+`</strong>`
+                                                    if(salida.escalas.length>1){
+                                                        lista += `<span style="color: #99c21c;"> <strong>+1</strong></span>`
+                                                    }
+                                                    lista += ` 
+                                                </span>
+                                            </div>
+                                            <div class="col-2">
+                                                <span><strong>2h:30min</strong></span>
+                                            </div>
+                                            <div class="col-3">`
+                                                if(aux){
+                                                    lista += `<span>Directo</span>`
+                                                }
+                                                else{
+                                                    lista += `<span>1 Escala(s)</span>`
+                                                }
+                                                lista +=`
+                                            </div>
+                                            <div class="col-1" style="text-align: end;">
+                                            </div>
+                                            <div> 
+                                                
+
+                                                            <hr style="margin:0;">
+                                                            <div class="row" >
+                                                                <div class="col-2" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
+                                                                    <span style="font-size:12px;"><strong>Economy</strong></span>
+                                                                    <span style="font-size:12px;"><strong>N°: La5415</strong></span>
+                                                                </div>
+                                                                <div class="col-4" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
+                                                                    <span style="font-size:12px;"><strong>12:45</strong></span>
+                                                                    <span style="font-size:12px;">UIO, BOG</span>
+                                                                </div>
+                                                                <div class="col-2" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
+                                                                    <i class="icon-plane" style="transform: rotate(90deg); margin-right: 10px; font-size: 30px;"></i>
+                                                                    <span style="font-size:12px;">3H:30min</span>
+                                                                </div>
+                                                                <div class="col-4" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
+                                                                    <span style="font-size:12px;"><strong>16:21</strong></span>
+                                                                    <span style="font-size:12px;">BOG, PAN</span>
+                                                                </div>
+                                                            </div>
+                                                            <hr style="margin:0;">`
+                                                            if(aux){
+                                                                lista +=` 
+                                                                    <div class="row" style="background-color:#f9f9f9">
+                                                                        <div class="col-12" style="text-align: center; justify-content: center;">
+                                                                            <i class="icon-clock" style="margin-right: 10px; font-size: 30px;"></i>
+                                                                            <span style="font-size:12px;">Escala BOG: 4h56min</span>
+                                                                        </div>
+                                                                    </div>
+                                                                `
+                                                            }    
+
+                                                    lista +=`
+
+
+                                            </div>
+                                            <hr style="font-size: 16px;">
+                                        </div>
+
+
+
+                                <br>
+                                <div class="row">
+                                    <div class="col-12" style="display: flex; align-items: center;">
+                                        <i class="icon-plane" style="transform: rotate(315deg); margin-right: 10px; font-size: 20px;"></i>
+                                        <h5 style="margin-right: 20px; font-size: 16px;">VUELTA</h5>
+                                        <h5 style="font-size: 16px;"> 10/20/2024</h5>
+                                    </div>
+                                </div>
+
+
+
+                                 <hr style="margin-top: 0; margin-bottom: 0;">
+                                        <div class="row mx-1" style="align-items: center;">
+                                            <div class="col-1">
+                                                
+                                            </div>
+                                            <div class="col-4">
+                                                <span>
+                                                    UIO: <strong>5:00</strong>
+                                                    <i class="icon-left" style="font-size: 22px;"></i>
+                                                    BOG: <strong>12:00</strong>`
+                                                    if(aux){
+                                                        lista += `<span style="color: #99c21c;"> <strong>+1</strong></span>`
+                                                    }
+                                                    lista += ` 
+                                                </span>
+                                            </div>
+                                            <div class="col-2">
+                                                <span><strong>2h:30min</strong></span>
+                                            </div>
+                                            <div class="col-3">`
+                                                if(aux){
+                                                    lista += `<span>Directo</span>`
+                                                }
+                                                else{
+                                                    lista += `<span>1 Escala(s)</span>`
+                                                }
+                                                lista +=`
+                                            </div>
+                                            <div class="col-1" style="text-align: end;">
+                                            </div>
+                                            <div> 
+                                                
+
+                                                            <hr style="margin:0;">
+                                                            <div class="row" >
+                                                                <div class="col-2" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
+                                                                    <span style="font-size:12px;"><strong>Economy</strong></span>
+                                                                    <span style="font-size:12px;"><strong>N°: La5415</strong></span>
+                                                                </div>
+                                                                <div class="col-4" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
+                                                                    <span style="font-size:12px;"><strong>12:45</strong></span>
+                                                                    <span style="font-size:12px;">UIO, BOG</span>
+                                                                </div>
+                                                                <div class="col-2" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
+                                                                    <i class="icon-plane" style="transform: rotate(90deg); margin-right: 10px; font-size: 30px;"></i>
+                                                                    <span style="font-size:12px;">3H:30min</span>
+                                                                </div>
+                                                                <div class="col-4" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
+                                                                    <span style="font-size:12px;"><strong>16:21</strong></span>
+                                                                    <span style="font-size:12px;">BOG, PAN</span>
+                                                                </div>
+                                                            </div>
+                                                            <hr style="margin:0;">`
+                                                            if(aux){
+                                                                lista +=` 
+                                                                    <div class="row" style="background-color:#f9f9f9">
+                                                                        <div class="col-12" style="text-align: center; justify-content: center;">
+                                                                            <i class="icon-clock" style="margin-right: 10px; font-size: 30px;"></i>
+                                                                            <span style="font-size:12px;">Escala BOG: 4h56min</span>
+                                                                        </div>
+                                                                    </div>
+                                                                `
+                                                            }    
+
+                                                    lista +=`
+
+
+                                            </div>
+                                            <hr style="font-size: 16px;">
+                                        </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
+   
+    $("#detalleVuelos").html(lista)
+}
+
+
+
+
+function sacarLogoAereolina(code){
+    let lista = ""
+    if(code == 'CM'){
+        lista = "img/aereolinas_logos/copa.png"
+    }
+    else if(code == 'DL'){
+        lista ="img/aereolinas_logos/delta.png"
+    }
+    else if(code == 'AV' || code == '2K'){
+        lista = "img/aereolinas_logos/avianca.png"
+    }
+    else if(code == 'B6'){
+        lista = "img/aereolinas_logos/jet.png"
+    }
+    else if(code == 'LA'){
+        lista = "img/aereolinas_logos/latam.jpg"
+    }
+    else if(code == 'AA'){
+        lista = "img/aereolinas_logos/american.png"
+    }
+    return lista
 }
