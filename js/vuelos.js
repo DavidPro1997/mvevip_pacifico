@@ -24,6 +24,82 @@ function consultarFechas(ciudad, tipo){
 }
 
 
+function verificarPago(){
+    $("#spinnerVerificar").show()
+    Obtener(null, 'leads/consulta-pago/'+idPago, datos => {
+        if (datos.estado) {
+            $("#spinnerVerificar").hide()
+            if(datos.pago.estado){
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Pago procesado con éxito',
+                    text: datos.pago.mensaje
+                })
+            }else{
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Pago pendiente',
+                    text: datos.pago.mensaje
+                })
+            }
+            
+        }
+        else{
+            $("#spinnerVerificar").hide()
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: datos.error
+            })
+        }
+        
+    })
+}
+
+
+function avanzar(){
+    window.open(linkPago, '_blank');
+    $("#botonAvanzar").hide()
+    $("#botonVerificar").show()
+    $("#headerPago").show()
+    
+
+}
+
+
+var idPago = 0
+var linkPago = ""
+function pagar(){
+    $("#spinner").show()
+    const fechaBuscada = document.getElementById("fechaSalida").value
+    let objeto = fechasGlobales.find(item => item.fecha === fechaBuscada);
+    const date = armarArrayDatosPago()
+    Enviar(JSON.stringify(date), 'leads/registro-pago/'+objeto.id, datos => {
+        if (datos.consulta) {
+            idPago = datos.idPago
+            linkPago = datos.link
+            $("#spinner").hide()
+            $("#botonAvanzar").show()
+            $("#botonVerificar").hide()
+            $('#info-alert-modal').modal('show');
+            $('#standard-modal').modal('hide');
+        }
+        else{
+            $("#spinner").hide()
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: datos.error
+            }).then(() => {
+                $('#standard-modal').modal('show');
+            });
+            
+        }
+        
+    })
+}
+
+
 var fechasGlobales =[]
 function armarArrayFechas(fechas,tipo){
     fechasGlobales = []
@@ -177,7 +253,7 @@ function cerrarDropdown(id) {
 
 function armarArrayDatos(){
     const datos = {
-        "documento": document.getElementById("documento").value,
+        "documento": "1723025043",
         "apellidos": document.getElementById("apellidos").value,
         "nombres": document.getElementById("nombres").value,
         "email": document.getElementById("correo").value,
@@ -191,18 +267,36 @@ function armarArrayDatos(){
 
 
 
+function armarArrayDatosPago(){
+    const datos = {
+        "documento": document.getElementById("documento").value,
+        "apellidos": document.getElementById("apellidos").value,
+        "nombres": document.getElementById("nombres").value,
+        "email": document.getElementById("correo").value,
+        "celular": document.getElementById("celular").value,
+        // "valor": parseFloat(precio)
+        "valor": 3500
+        
+    }
+    return datos
+}
+
+
+var precio = 0
 function recibirCotizacion(){
     const fechaBuscada = document.getElementById("fechaSalida").value
     let objeto = fechasGlobales.find(item => item.fecha === fechaBuscada);
     const date = armarArrayDatos()
     Enviar(JSON.stringify(date), 'leads/consulta-itinerario/'+objeto.id, datos => {
         if (datos.estado) {
+            precio = datos.consulta.precio.totalPaquete.valor
             ponerCosto(datos.consulta.precio)
             armarVuelos(datos.consulta.origen, datos.consulta.destino,datos.consulta.salida,datos.consulta.retorno)
+            $("#detalles").show()
             Swal.fire({
                 icon: 'success',
                 title: 'Bien',
-                text: 'Se ha enviado su cotización a su número y correo registrados'
+                text: '¡Revisa tu paquete!'
             })
         }
         else{
@@ -224,7 +318,7 @@ function ponerCosto(precio){
     lista += `
             <li class="table-header clearfix">
                 <div class="col">
-                    <strong>Cartagena</strong>
+                    <strong>Cartagena + Ticket Aéreo</strong>
                 </div>
                 <div class="col">
                     <strong>Total</strong>
@@ -234,7 +328,8 @@ function ponerCosto(precio){
                 lista += `
                     <li class="clearfix">
                         <div class="col" style="text-transform:none;">
-                            <img src="img/products/thumb-1.jpg" width="50" height="50" alt=""> `+personas.adultos+` Adulto(s)
+                            <i class="icon-adult" style="font-size: 25px; color:#99c21c;"></i> 
+                            `+personas.adultos+` Adulto(s)
                         </div>
                         <div class="col second">
                             $`+precio.adulto.valor.toFixed(2)+`
@@ -247,7 +342,8 @@ function ponerCosto(precio){
                 lista += `
                     <li class="clearfix">
                         <div class="col" style="text-transform:none;">
-                            <img src="img/products/thumb-1.jpg" width="50" height="50" alt=""> `+personas.ninos+` Niño(s)
+                            <i class="icon-child" style="font-size: 25px; color:#99c21c;"></i> 
+                            `+personas.ninos+` Niño(s)
                         </div>
                         <div class="col second">
                             $`+precio.nino.valor.toFixed(2)+`
@@ -260,7 +356,8 @@ function ponerCosto(precio){
                 lista += `
                     <li class="clearfix">
                         <div class="col" style="text-transform:none;">
-                            <img src="img/products/thumb-1.jpg" width="50" height="50" alt=""> `+personas.infante+` Infante(s)
+                            <i class="icon-child" style="font-size: 25px; color:#99c21c;"></i>  
+                            `+personas.infante+` Infante(s)
                         </div>
                         <div class="col second">
                             $`+precio.infante.valor.toFixed(2)+`
@@ -303,169 +400,9 @@ function armarVuelos(origen, destino, salida, retorno){
                     <div>
                         <div class="row d-flex">
                             <div class="col-12">
-                                <div class="row mx-2">
-                                    <div class="col-12" style="display: flex; align-items: center;">
-                                        <i class="icon-plane" style="transform: rotate(45deg); margin-right: 10px; font-size: 20px;"></i>
-                                        <h5 style="margin-right: 20px; font-size: 16px;">IDA</h5>
-                                        <h5 style="font-size: 16px;"> `+salida.fecha+`</h5>
-                                    </div>
-                                </div>
-                                        <hr style="margin-top: 0; margin-bottom: 0;">
-                                        <div class="row mx-1" style="align-items: center;">
-                                            <div class="col-1">
-                                                
-                                            </div>
-                                            <div class="col-4">
-                                                <span>
-                                                    <strong>`+salida.escalas[0].desde+`</strong>
-                                                    <i class="icon-left" style="font-size: 22px;"></i>
-                                                    <strong>`+salida.escalas[salida.escalas.length-1].hasta+`</strong>`
-                                                    if(salida.escalas.length>1){
-                                                        lista += `<span style="color: #99c21c;"> <strong>+1</strong></span>`
-                                                    }
-                                                    lista += ` 
-                                                </span>
-                                            </div>
-                                            <div class="col-2">
-                                                <span><strong>2h:30min</strong></span>
-                                            </div>
-                                            <div class="col-3">`
-                                                if(aux){
-                                                    lista += `<span>Directo</span>`
-                                                }
-                                                else{
-                                                    lista += `<span>1 Escala(s)</span>`
-                                                }
-                                                lista +=`
-                                            </div>
-                                            <div class="col-1" style="text-align: end;">
-                                            </div>
-                                            <div> 
-                                                
-
-                                                            <hr style="margin:0;">
-                                                            <div class="row" >
-                                                                <div class="col-2" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
-                                                                    <span style="font-size:12px;"><strong>Economy</strong></span>
-                                                                    <span style="font-size:12px;"><strong>N°: La5415</strong></span>
-                                                                </div>
-                                                                <div class="col-4" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
-                                                                    <span style="font-size:12px;"><strong>12:45</strong></span>
-                                                                    <span style="font-size:12px;">UIO, BOG</span>
-                                                                </div>
-                                                                <div class="col-2" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
-                                                                    <i class="icon-plane" style="transform: rotate(90deg); margin-right: 10px; font-size: 30px;"></i>
-                                                                    <span style="font-size:12px;">3H:30min</span>
-                                                                </div>
-                                                                <div class="col-4" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
-                                                                    <span style="font-size:12px;"><strong>16:21</strong></span>
-                                                                    <span style="font-size:12px;">BOG, PAN</span>
-                                                                </div>
-                                                            </div>
-                                                            <hr style="margin:0;">`
-                                                            if(aux){
-                                                                lista +=` 
-                                                                    <div class="row" style="background-color:#f9f9f9">
-                                                                        <div class="col-12" style="text-align: center; justify-content: center;">
-                                                                            <i class="icon-clock" style="margin-right: 10px; font-size: 30px;"></i>
-                                                                            <span style="font-size:12px;">Escala BOG: 4h56min</span>
-                                                                        </div>
-                                                                    </div>
-                                                                `
-                                                            }    
-
-                                                    lista +=`
-
-
-                                            </div>
-                                            <hr style="font-size: 16px;">
-                                        </div>
-
-
-
+                                `+plasmarVuelosDom(salida,0)+`
                                 <br>
-                                <div class="row">
-                                    <div class="col-12" style="display: flex; align-items: center;">
-                                        <i class="icon-plane" style="transform: rotate(315deg); margin-right: 10px; font-size: 20px;"></i>
-                                        <h5 style="margin-right: 20px; font-size: 16px;">VUELTA</h5>
-                                        <h5 style="font-size: 16px;"> 10/20/2024</h5>
-                                    </div>
-                                </div>
-
-
-
-                                 <hr style="margin-top: 0; margin-bottom: 0;">
-                                        <div class="row mx-1" style="align-items: center;">
-                                            <div class="col-1">
-                                                
-                                            </div>
-                                            <div class="col-4">
-                                                <span>
-                                                    UIO: <strong>5:00</strong>
-                                                    <i class="icon-left" style="font-size: 22px;"></i>
-                                                    BOG: <strong>12:00</strong>`
-                                                    if(aux){
-                                                        lista += `<span style="color: #99c21c;"> <strong>+1</strong></span>`
-                                                    }
-                                                    lista += ` 
-                                                </span>
-                                            </div>
-                                            <div class="col-2">
-                                                <span><strong>2h:30min</strong></span>
-                                            </div>
-                                            <div class="col-3">`
-                                                if(aux){
-                                                    lista += `<span>Directo</span>`
-                                                }
-                                                else{
-                                                    lista += `<span>1 Escala(s)</span>`
-                                                }
-                                                lista +=`
-                                            </div>
-                                            <div class="col-1" style="text-align: end;">
-                                            </div>
-                                            <div> 
-                                                
-
-                                                            <hr style="margin:0;">
-                                                            <div class="row" >
-                                                                <div class="col-2" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
-                                                                    <span style="font-size:12px;"><strong>Economy</strong></span>
-                                                                    <span style="font-size:12px;"><strong>N°: La5415</strong></span>
-                                                                </div>
-                                                                <div class="col-4" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
-                                                                    <span style="font-size:12px;"><strong>12:45</strong></span>
-                                                                    <span style="font-size:12px;">UIO, BOG</span>
-                                                                </div>
-                                                                <div class="col-2" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
-                                                                    <i class="icon-plane" style="transform: rotate(90deg); margin-right: 10px; font-size: 30px;"></i>
-                                                                    <span style="font-size:12px;">3H:30min</span>
-                                                                </div>
-                                                                <div class="col-4" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
-                                                                    <span style="font-size:12px;"><strong>16:21</strong></span>
-                                                                    <span style="font-size:12px;">BOG, PAN</span>
-                                                                </div>
-                                                            </div>
-                                                            <hr style="margin:0;">`
-                                                            if(aux){
-                                                                lista +=` 
-                                                                    <div class="row" style="background-color:#f9f9f9">
-                                                                        <div class="col-12" style="text-align: center; justify-content: center;">
-                                                                            <i class="icon-clock" style="margin-right: 10px; font-size: 30px;"></i>
-                                                                            <span style="font-size:12px;">Escala BOG: 4h56min</span>
-                                                                        </div>
-                                                                    </div>
-                                                                `
-                                                            }    
-
-                                                    lista +=`
-
-
-                                            </div>
-                                            <hr style="font-size: 16px;">
-                                        </div>
-
-
+                                `+plasmarVuelosDom(retorno,1)+`
                             </div>
                         </div>
                     </div>
@@ -475,6 +412,102 @@ function armarVuelos(origen, destino, salida, retorno){
    
     $("#detalleVuelos").html(lista)
 }
+
+
+
+function plasmarVuelosDom(vuelo, tipo){
+    let lista = ""
+    if(tipo == 0){
+        lista = ` 
+            <div class="row mx-2">
+                <div class="col-12" style="display: flex; align-items: center;">
+                    <i class="icon-plane" style="transform: rotate(45deg); margin-right: 10px; font-size: 20px;"></i>
+                    <h5 style="margin-right: 20px; font-size: 16px;">IDA</h5>
+                    <h5 style="font-size: 16px;"> `+vuelo.fecha+`</h5>
+                </div>
+            </div>
+        `
+    }else if (tipo == 1){
+        lista = ` 
+            <div class="col-12" style="display: flex; align-items: center;">
+                <i class="icon-plane" style="transform: rotate(315deg); margin-right: 10px; font-size: 20px;"></i>
+                <h5 style="margin-right: 20px; font-size: 16px;">VUELTA</h5>
+                <h5 style="font-size: 16px;"> `+vuelo.fecha+`</h5>
+            </div>
+        `
+    }
+    lista =` 
+        
+        <hr style="margin-top: 0; margin-bottom: 0;">
+        <div class="row mx-1" style="align-items: center;">
+            <div class="col-6">
+                <span>
+                    <strong>`+vuelo.escalas[0].desde+`</strong>
+                    <i class="icon-left" style="font-size: 22px;"></i>
+                    <strong>`+vuelo.escalas[vuelo.escalas.length-1].hasta+`</strong>`
+                    if(compararHoras(vuelo.escalas[0].desde, vuelo.escalas[vuelo.escalas.length-1].hasta)){
+                        lista += `<span style="color: #99c21c;"> <strong>+1</strong></span>`
+                    }
+                    lista += ` 
+                </span>
+            </div>
+            <div class="col-3">
+                <span>`+diferenciaHoras(vuelo.escalas[0].desde, vuelo.escalas[vuelo.escalas.length-1].hasta)+`</span>
+            </div>
+            <div class="col-3" style="text-align: end; justify-content: end; display: flex; flex-direction: column;">`
+                if(vuelo.escalas.length<2){
+                    lista += `<span>Directo</span>`
+                }
+                else {
+                    lista += `<span>`+(vuelo.escalas.length-1)+` Escala(s)</span>`
+                }
+                lista +=`
+            </div>
+            <div> 
+                
+
+            <hr style="margin:0;">
+            `
+            vuelo.escalas.forEach((element,index) => {
+                lista += `
+                <div class="row" >
+                    <div class="col-1">
+                    </div>
+                    <div class="col-3" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
+                        <span style="font-size:12px;">`+element.desde+`</span>
+                    </div>
+                    <div class="col-4" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
+                        <i class="icon-plane" style="transform: rotate(90deg); margin-right: 10px; font-size: 30px;"></i>
+                        <span style="font-size:12px;">`+element.duracion+`</span>
+                    </div>
+                    <div class="col-3" style="text-align: center; justify-content: center; display: flex; flex-direction: column;">
+                        <span style="font-size:12px;">`+element.hasta+`</span>
+                    </div>
+                    <div class="col-1">
+                    </div>
+                </div>
+                <hr style="margin:0;">`
+                if(vuelo.escalas[index+1]){
+                    lista +=` 
+                        <div class="row" style="background-color:#f9f9f9">
+                            <div class="col-12" style="text-align: center; justify-content: center;">
+                                <i class="icon-clock" style="margin-right: 10px; font-size: 20px;"></i>
+                                <span style="font-size:12px;">Escala `+element.hasta.split(' ')[0]+`: `+diferenciaHoras(element.hasta,vuelo.escalas[index+1].desde)+`</span>
+                            </div>
+                        </div>
+                    `
+                }   
+            });
+            lista +=
+            `
+
+            </div>
+            <hr style="font-size: 16px;">
+        </div>
+    `
+    return lista
+}
+
 
 
 
@@ -500,4 +533,48 @@ function sacarLogoAereolina(code){
         lista = "img/aereolinas_logos/american.png"
     }
     return lista
+}
+
+function compararHoras(hora1, hora2) {
+    // Extraer solo la parte dentro de los paréntesis
+    let h1 = hora1.match(/\((\d{2}:\d{2})\)/)[1];
+    let h2 = hora2.match(/\((\d{2}:\d{2})\)/)[1];
+
+    // Convertir las horas a formato de objeto Date para comparar
+    let time1 = new Date(`1970-01-01T${h1}:00`);
+    let time2 = new Date(`1970-01-01T${h2}:00`);
+
+    // Devolver true si la hora2 es menor que hora1
+    return time2 < time1;
+}
+
+
+function diferenciaHoras(hora1, hora2) {
+    // Extraer solo la parte dentro de los paréntesis
+    let h1 = hora1.match(/\((\d{2}:\d{2})\)/)[1];
+    let h2 = hora2.match(/\((\d{2}:\d{2})\)/)[1];
+
+    // Convertir las horas a objetos Date
+    let time1 = new Date(`1970-01-01T${h1}:00`);
+    let time2 = new Date(`1970-01-01T${h2}:00`);
+
+    // Si la hora2 es menor que hora1, asumimos que la hora2 es del día siguiente
+    if (time2 < time1) {
+        time2.setDate(time2.getDate() + 1);
+    }
+
+    // Calcular la diferencia en milisegundos
+    let diferenciaMs = time2 - time1;
+
+    // Convertir a horas y minutos
+    let diferenciaHoras = Math.floor(diferenciaMs / (1000 * 60 * 60));
+    let diferenciaMinutos = Math.floor((diferenciaMs % (1000 * 60 * 60)) / (1000 * 60));
+
+    // Devolver el resultado en el formato XH:XXMIN
+    return `${diferenciaHoras}h:${diferenciaMinutos}min`;
+}
+
+
+function masInformacion(){
+    window.open("https://bit.ly/CTG_TC_PCFC", '_blank');
 }
