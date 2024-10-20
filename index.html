@@ -253,7 +253,9 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label><i class="icon-calendar" style="font-size: 22px;"></i>Fecha de salida</label>
-                                    <input type="text" id="fechaSalida" class="form-control" placeholder="Eliga su fecha de salida" style="background-color: white; text-align: center; font-size: 15px;" readonly>
+                                    <input type="text" id="fechaSalida" class="form-control" placeholder="Elige su fecha de salida" 
+                                    style="background-color: white; text-align: center; font-size: 15px;" readonly 
+                                    onfocus="this.removeAttribute('readonly');" onblur="this.setAttribute('readonly', true);" />                                
                                 </div>
                             </div>
                             

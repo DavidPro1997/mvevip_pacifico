@@ -145,6 +145,7 @@ function iniciarCalendario(fechaInicio,fechaFin,fechasDisponibles, fechaNoDispon
             dateFormat: "Y-m-d", // Formato de fecha
             minDate: fechaInicio,
             maxDate: fechaFin,
+            disableMobile: true,
             disable: fechaNoDisponible,
             onDayCreate: function(dObj, dStr, fp, dayElem) {
                 const fecha = dayElem.dateObj.toISOString().split('T')[0];
