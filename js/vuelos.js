@@ -226,10 +226,6 @@ function validarRango(input) {
     const min = parseInt(input.min);
     const max = parseInt(input.max);
     let value = input.value;
-    if (value === "") {
-        input.value = min;
-        return;
-    }
     value = parseInt(value, 10); // Esto elimina los ceros a la izquierda
     if (value < min) {
         input.value = min;
@@ -275,8 +271,8 @@ function armarArrayDatosPago(){
         "nombres": document.getElementById("nombres").value,
         "email": document.getElementById("correo").value,
         "celular": document.getElementById("celular").value,
-        // "valor": parseFloat(precio)
-        "valor": 3500
+        "valor": parseFloat(precio)
+        // "valor": 3500
         
     }
     return datos
