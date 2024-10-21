@@ -4,8 +4,8 @@ function recibirInformacion() {
     if (idVerificar) {
         const id = parseInt(localStorage.getItem('idVerificar'))
         const datosCliente = JSON.parse(localStorage.getItem("datosCliente"))
-        console.log(id)
-        console.log(datosCliente)
+        const ciudad = localStorage.getItem('lugarSalida')
+        consultarFechas(ciudad, 5)
         verificarPago(id)
         armarDom(datosCliente)
         
@@ -29,7 +29,6 @@ function armarDom(datosCLiente){
     document.getElementById("numeroNino").value = datosCLiente.ninos
     document.getElementById("numeroBebe").value = datosCLiente.infantes
     cargarPersonas()
-    consultarFechas(ciudad, 5)
 }
 
 
@@ -61,10 +60,8 @@ function consultarFechas(ciudad, tipo){
 
 
 function verificarPago(idPago){
-    $('#info-alert-modal').modal('show');
     Obtener(null, 'leads/consulta-pago/'+idPago, datos => {
         if (datos.estado) {
-            $('#info-alert-modal').modal('hide');
             if(datos.pago.estado){
                 Swal.fire({
                     icon: 'success',
@@ -85,7 +82,6 @@ function verificarPago(idPago){
             
         }
         else{
-            $('#info-alert-modal').modal('show');
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -313,7 +309,13 @@ function armarArrayDatosPago(){
 
 var precio = 0
 function recibirCotizacion(id){
-    const fechaBuscada = document.getElementById("fechaSalida").value
+    let fechaBuscada = ""
+    if(id){
+        fechaBuscada = document.getElementById("fechaSalida").value
+    }else{
+        fechaBuscada = localStorage.getItem('fechaSalida')
+        document.getElementById("fechaSalida").value = fechaBuscada
+    }
     const lugarSalida = document.getElementById("salida").value
     localStorage.setItem("fechaSalida",fechaBuscada)
     localStorage.setItem("lugarSalida",lugarSalida)
@@ -620,4 +622,10 @@ function diferenciaHoras(hora1, hora2) {
 
 function masInformacion(){
     window.open("https://bit.ly/CTG_TC_PCFC", '_blank');
+}
+
+function validarDiezDigitos(input){
+    if (input.value.length > 10) {
+        input.value = input.value.slice(0, 10); // Limita a 10 caracteres
+    }
 }
