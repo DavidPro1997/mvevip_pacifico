@@ -1,3 +1,39 @@
+function recibirInformacion() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const idVerificar = urlParams.get('idVerificar');
+    if (idVerificar) {
+        const id = parseInt(localStorage.getItem('idVerificar'))
+        const datosCliente = JSON.parse(localStorage.getItem("datosCliente"))
+        console.log(id)
+        console.log(datosCliente)
+        verificarPago(id)
+        armarDom(datosCliente)
+        
+    }
+    else{
+        scrollTop()
+        escogerSalida('UIO - Quito - Mariscal Sucre - Ecuador',5)
+    }
+}
+
+
+function armarDom(datosCLiente){
+    const ciudad = localStorage.getItem('lugarSalida')
+    document.getElementById("salida").value = ciudad
+    document.getElementById("fechaSalida").value = localStorage.getItem('fechaSalida')
+    document.getElementById("apellidos").value = datosCLiente.apellidos
+    document.getElementById("nombres").value = datosCLiente.nombres
+    document.getElementById("correo").value = datosCLiente.email
+    document.getElementById("celular").value = datosCLiente.celular
+    document.getElementById("numeroAdulto").value = datosCLiente.adultos
+    document.getElementById("numeroNino").value = datosCLiente.ninos
+    document.getElementById("numeroBebe").value = datosCLiente.infantes
+    cargarPersonas()
+    consultarFechas(ciudad, 5)
+}
+
+
+
 function escogerSalida(ciudadEscogida, tipo){
     document.getElementById("salida").value = ciudadEscogida.toUpperCase()
     document.getElementById("salida").style.fontSize = "15px"        
@@ -24,51 +60,48 @@ function consultarFechas(ciudad, tipo){
 }
 
 
-function verificarPago(){
-    $("#spinnerVerificar").show()
+function verificarPago(idPago){
+    $('#info-alert-modal').modal('show');
     Obtener(null, 'leads/consulta-pago/'+idPago, datos => {
         if (datos.estado) {
-            $("#spinnerVerificar").hide()
+            $('#info-alert-modal').modal('hide');
             if(datos.pago.estado){
                 Swal.fire({
                     icon: 'success',
                     title: 'Pago procesado con éxito',
                     text: datos.pago.mensaje
-                })
+                }).then(() => {
+                    recibirCotizacion()
+                });
             }else{
                 Swal.fire({
                     icon: 'info',
-                    title: 'Pago pendiente',
+                    title: 'Procesando pago',
                     text: datos.pago.mensaje
-                })
+                }).then(() => {
+                    recibirCotizacion()
+                });
             }
             
         }
         else{
-            $("#spinnerVerificar").hide()
+            $('#info-alert-modal').modal('show');
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: datos.error
-            })
+            }).then(() => {
+                recibirCotizacion()
+            });
         }
         
     })
 }
 
 
-function avanzar(){
-    window.open(linkPago, '_blank');
-    $("#botonAvanzar").hide()
-    $("#botonVerificar").show()
-    $("#headerPago").show()
-    
-
-}
 
 
-var idPago = 0
-var linkPago = ""
+
 function pagar(){
     $("#spinner").show()
     const fechaBuscada = document.getElementById("fechaSalida").value
@@ -76,12 +109,9 @@ function pagar(){
     const date = armarArrayDatosPago()
     Enviar(JSON.stringify(date), 'leads/registro-pago/'+objeto.id, datos => {
         if (datos.consulta) {
-            idPago = datos.idPago
-            linkPago = datos.link
             $("#spinner").hide()
-            $("#botonAvanzar").show()
-            $("#botonVerificar").hide()
-            $('#info-alert-modal').modal('show');
+            window.open(datos.link, '_self');
+            localStorage.setItem("idVerificar",datos.idPago)
             $('#standard-modal').modal('hide');
         }
         else{
@@ -165,6 +195,7 @@ function iniciarCalendario(fechaInicio,fechaFin,fechasDisponibles, fechaNoDispon
             dateFormat: "Y-m-d", // Formato de fecha
             minDate: fechaInicio,
             maxDate: fechaFin,
+            disableMobile: true,
             disable: fechaNoDisponible,
             onDayCreate: function(dObj, dStr, fp, dayElem) {
                 const fecha = dayElem.dateObj.toISOString().split('T')[0];
@@ -226,6 +257,7 @@ function validarRango(input) {
     const min = parseInt(input.min);
     const max = parseInt(input.max);
     let value = input.value;
+    
     value = parseInt(value, 10); // Esto elimina los ceros a la izquierda
     if (value < min) {
         input.value = min;
@@ -250,7 +282,6 @@ function cerrarDropdown(id) {
 
 function armarArrayDatos(){
     const datos = {
-        "documento": "1723025043",
         "apellidos": document.getElementById("apellidos").value,
         "nombres": document.getElementById("nombres").value,
         "email": document.getElementById("correo").value,
@@ -259,6 +290,7 @@ function armarArrayDatos(){
         "ninos": personas.ninos,
         "infantes": personas.infante
     }
+    localStorage.setItem("datosCliente",JSON.stringify(datos))
     return datos
 }
 
@@ -280,8 +312,11 @@ function armarArrayDatosPago(){
 
 
 var precio = 0
-function recibirCotizacion(){
+function recibirCotizacion(id){
     const fechaBuscada = document.getElementById("fechaSalida").value
+    const lugarSalida = document.getElementById("salida").value
+    localStorage.setItem("fechaSalida",fechaBuscada)
+    localStorage.setItem("lugarSalida",lugarSalida)
     let objeto = fechasGlobales.find(item => item.fecha === fechaBuscada);
     const date = armarArrayDatos()
     Enviar(JSON.stringify(date), 'leads/consulta-itinerario/'+objeto.id, datos => {
@@ -290,11 +325,14 @@ function recibirCotizacion(){
             ponerCosto(datos.consulta.precio)
             armarVuelos(datos.consulta.origen, datos.consulta.destino,datos.consulta.salida,datos.consulta.retorno)
             $("#detalles").show()
-            Swal.fire({
-                icon: 'success',
-                title: 'Bien',
-                text: '¡Revisa tu paquete!'
-            })
+            if(id){
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Consulta realizada',
+                    text: '¡Revisa tu paquete!'
+                })
+            }
+            
         }
         else{
             Swal.fire({
@@ -373,6 +411,14 @@ function ponerCosto(precio){
                     </div>
                 </li>
     `
+    if(precio.totalPaquete.valor>=3500){
+        $("#botonPagarAhora2").hide()
+        $("#botonPagarAhora1").hide()
+    }
+    else{
+        $("#botonPagarAhora2").show()
+        $("#botonPagarAhora1").show()
+    }
     $("#costos").html(lista)
 }
 
@@ -385,7 +431,7 @@ function armarVuelos(origen, destino, salida, retorno){
                 <div class="row">
                         <div class="row my-1 mx-1">
                             <div class="col-lg-6 d-flex" style="align-items: center;">
-                                <img src="`+sacarLogoAereolina("2K")+`" style=" margin-right: 15px;" alt="" height="30" width="30">
+                                <img src="`+sacarLogoAereolina("2K")+`" style=" margin-right: 15px;" alt="" height="30" >
                                 <small class="small-text" style="font-size: 1rem; align-items: center; display: flex;">Avianca</small>
                             </div>
                             <div class="col-lg-6" style="text-align: end; justify-content: end; display: flex; flex-direction: column;">
