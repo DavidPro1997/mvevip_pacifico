@@ -282,7 +282,7 @@ function cerrarDropdown(id) {
 function validarDatos(){
     const nombres = document.getElementById("apellidos").value 
     const apellido = document.getElementById("nombres").value
-    if(nombres.length > 4 && apellido.length > 4){
+    if(nombres.length >= 3 && apellido.length >= 3){
         return true
     }
     return false
