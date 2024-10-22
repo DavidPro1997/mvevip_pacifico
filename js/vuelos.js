@@ -41,9 +41,14 @@ function escogerSalida(ciudadEscogida, tipo){
     consultarFechas(ciudadEscogida, tipo)
 }
 
+
+
+var salidaGlobal = ""
+var destinoGlobal = "CTG"
 function consultarFechas(ciudad, tipo){
     const salida = ciudad.substring(0, 3)
-    Obtener(null, 'leads/consulta-fechas/'+salida+'/CTG', datos => {
+    salidaGlobal = salida
+    Obtener(null, 'leads/consulta-fechas/'+salida+'/'+destinoGlobal, datos => {
         if (datos.estado) {
            armarArrayFechas(datos.consulta, tipo)
         }
@@ -284,14 +289,15 @@ function validarDatos(){
 }
 
 
-function armarArrayDatos(){
+function armarArrayDatos(fecha){
     const datos = {
         "nombres": document.getElementById("apellidos").value +" "+ document.getElementById("nombres").value,
         "email": document.getElementById("correo").value,
         "celular": document.getElementById("celular").value,
         "adultos": personas.adultos,
         "ninos": personas.ninos,
-        "infantes": personas.infante
+        "infantes": personas.infante,
+        "observaciones": salidaGlobal+"_"+destinoGlobal+"_"+fecha+"_"+(personas.adultos+personas.ninos+personas.infante)+"personas"
     }
     localStorage.setItem("datosCliente",JSON.stringify(datos))
     return datos
@@ -328,7 +334,7 @@ function recibirCotizacion(id){
     localStorage.setItem("lugarSalida",lugarSalida)
     let objeto = fechasGlobales.find(item => item.fecha === fechaBuscada);
     if(validarDatos()){
-        const date = armarArrayDatos()
+        const date = armarArrayDatos(fechaBuscada)
         Enviar(JSON.stringify(date), 'leads/consulta-itinerario/'+objeto.id, datos => {
             if (datos.estado) {
                 precio = datos.consulta.precio.totalPaquete.valor
