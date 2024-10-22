@@ -297,7 +297,7 @@ function armarArrayDatos(fecha){
         "adultos": personas.adultos,
         "ninos": personas.ninos,
         "infantes": personas.infante,
-        "observaciones": salidaGlobal+"_"+destinoGlobal+"_"+fecha+"_"+(personas.adultos+personas.ninos+personas.infante)+"personas"
+        "observaciones": salidaGlobal+"_"+destinoGlobal+"_"+fecha+"_"+personas.adultos+"adultos_"+personas.ninos+"ninos_"+personas.infante+"infantes"
     }
     localStorage.setItem("datosCliente",JSON.stringify(datos))
     return datos
