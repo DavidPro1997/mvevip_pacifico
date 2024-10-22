@@ -355,7 +355,13 @@ function ponerCosto(precio){
     lista += `
             <li class="table-header clearfix">
                 <div class="col">
-                    <strong>Cartagena + Ticket Aéreo</strong>
+                    <strong style="color:#99c21c;">PAQUETE COMPLETO</strong>
+                </div>
+                <div class="col">
+                    <strong>Precio</strong>
+                </div>
+                <div class="col">
+                    <strong>Cantidad</strong>
                 </div>
                 <div class="col">
                     <strong>Total</strong>
@@ -366,7 +372,13 @@ function ponerCosto(precio){
                     <li class="clearfix">
                         <div class="col" style="text-transform:none;">
                             <i class="icon-adult" style="font-size: 25px; color:#99c21c;"></i> 
-                            `+personas.adultos+` Adulto(s)
+                            Adulto(s)
+                        </div>
+                        <div class="col" style="text-transform:none;">
+                            $`+(precio.adulto.valor/personas.adultos).toFixed(2)+`
+                        </div>
+                        <div class="col" style="text-transform:none; text-align:center;">
+                            `+personas.adultos+` 
                         </div>
                         <div class="col second">
                             $`+precio.adulto.valor.toFixed(2)+`
@@ -380,7 +392,13 @@ function ponerCosto(precio){
                     <li class="clearfix">
                         <div class="col" style="text-transform:none;">
                             <i class="icon-child" style="font-size: 25px; color:#99c21c;"></i> 
-                            `+personas.ninos+` Niño(s)
+                            Niño(s)
+                        </div>
+                        <div class="col">
+                            $`+(precio.nino.valor/personas.ninos).toFixed(2)+`
+                        </div>
+                        <div class="col" style="text-transform:none; text-align:center;">
+                            `+personas.ninos+` 
                         </div>
                         <div class="col second">
                             $`+precio.nino.valor.toFixed(2)+`
@@ -394,7 +412,13 @@ function ponerCosto(precio){
                     <li class="clearfix">
                         <div class="col" style="text-transform:none;">
                             <i class="icon-child" style="font-size: 25px; color:#99c21c;"></i>  
-                            `+personas.infante+` Infante(s)
+                            Infante(s)
+                        </div>
+                        <div class="col second">
+                            $`+(precio.infante.valor/personas.infante).toFixed(2)+`
+                        </div>
+                        <div class="col" style="text-transform:none; text-align:center;">
+                            `+personas.infante+` 
                         </div>
                         <div class="col second">
                             $`+precio.infante.valor.toFixed(2)+`
@@ -408,6 +432,8 @@ function ponerCosto(precio){
                     <div class="col">
                         <strong>Total</strong>
                     </div>
+                    <div class="col"></div>
+                    <div class="col"></div>
                     <div class="col second">
                         <strong>$`+precio.totalPaquete.valor.toFixed(2)+`</strong>
                     </div>
