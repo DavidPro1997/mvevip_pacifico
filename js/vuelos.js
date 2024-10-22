@@ -278,8 +278,7 @@ function cerrarDropdown(id) {
 
 function armarArrayDatos(){
     const datos = {
-        "apellidos": document.getElementById("apellidos").value,
-        "nombres": document.getElementById("nombres").value,
+        "nombres": document.getElementById("apellidos").value +" "+ document.getElementById("nombres").value,
         "email": document.getElementById("correo").value,
         "celular": document.getElementById("celular").value,
         "adultos": personas.adultos,
