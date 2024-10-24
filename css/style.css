@@ -290,7 +290,7 @@ a.btn_full, .btn_full{
 	font-size: inherit;
 	color:#fff;
 	width:100%;
-	background: #99c21c;
+	background: #008489;
 	cursor: pointer;
 	padding: 12px 20px;
 	display: inline-block;
@@ -316,9 +316,9 @@ a.btn_full_outline{
 	border: none;
 	font-family: inherit;
 	font-size: inherit;
-	color:#99c21c;;
+	color:#008489;
 	background:none;
-	border:2px solid #99c21c;;
+	border:2px solid #008489;
 	cursor: pointer;
 	padding: 10px 20px;
 	display: inline-block;
@@ -394,13 +394,13 @@ header.sticky #logo .logo_sticky{ display:block; }
 	padding:0;
 }
 #logo_home h1 a, header.sticky #logo_home h1 a, header#plain #logo_home h1 a, header#colored #logo_home h1 a{
-	width:230px;
-	height:55px;
+	width:160px;
+	height:34px;
 	display:block;
-	background-image:url(../img/logo_sticky_colored.png);
+	background-image:url(../img/logo.png);
 	background-repeat:no-repeat;
 	background-position:left top;
-	background-size: 230px 55px;
+	background-size: 160px 34px;
 	text-indent:-9999px;
 }
 header.sticky #logo_home h1{
@@ -2341,7 +2341,7 @@ input.qty2:focus {
 .features-bg {
 	position: relative;
 	min-height: 400px;
-	background: url(https://content.arquitecturaydiseno.es/medio/2022/09/06/antes-de-hacer-caja-sigue-estos-pasos_4f25b451_1280x794.jpg) no-repeat center center;
+	background: url(../img/features-intro-01.jpg) no-repeat center center;
 	background-size: cover;
 }
 
@@ -2460,7 +2460,7 @@ ul#contact-info {
 	display: block;
 	text-transform: none;
 	font-size: 14px;
-	background: url(https://williamsonglobal.co.uk/wp-content/uploads/2023/07/Emergency-Courier-Services.jpg) no-repeat center center;
+	background: url(../img/bg_login.jpg) no-repeat center center;
 	background-size: cover;
 }
 
@@ -3570,8 +3570,8 @@ ul.list_order li span {
 	padding: 15px;
 	font-size: 12px;
 	color: #fff;
-	box-shadow: -5px -5px 15px rgba(255, 255, 255, 0.2);
-	background: #e6e6e6;
+	box-shadow: -5px -5px 15px rgba(48, 54, 61, 0.2);
+	background: #333;
 	opacity: 0;
 	cursor: default;
 	pointer-events: none;
@@ -3631,7 +3631,7 @@ ul.list_order li span {
 	position: absolute;
 	pointer-events: none;
 	border-color: transparent;
-	border-top-color: #e6e6e6;
+	border-top-color: #333;
 	border-width: 10px;
 	margin-left: -10px;
 }
@@ -7249,7 +7249,6 @@ a.box_news ul li:after {
   top: 0;
   z-index: 2;
   display: table;
-  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .parallax-content-1 div p {

@@ -12,7 +12,7 @@ function recibirInformacion() {
     }
     else{
         scrollTop()
-        escogerSalida('UIO - Quito - Mariscal Sucre - Ecuador',5)
+        // escogerSalida('UIO - Quito - Mariscal Sucre - Ecuador',5)
     }
 }
 
@@ -103,13 +103,14 @@ function verificarPago(idPago){
 
 
 
-function pagar(){
+function pagar(pasajeros){
     $("#spinner").show()
     const fechaBuscada = document.getElementById("fechaSalida").value
     let objeto = fechasGlobales.find(item => item.fecha === fechaBuscada);
-    const date = armarArrayDatosPago()
+    const date = armarArrayDatosPago(pasajeros)
     Enviar(JSON.stringify(date), 'leads/registro-pago/'+objeto.id, datos => {
         if (datos.consulta) {
+            console.log(date)
             $("#spinner").hide()
             window.open(datos.link, '_self');
             localStorage.setItem("idVerificar",datos.idPago)
@@ -224,7 +225,7 @@ function scrollTop() {
 
 
 var personas = {
-    adultos: 4,
+    adultos: 1,
     ninos: 0,
     infante: 0
     
@@ -305,15 +306,15 @@ function armarArrayDatos(fecha){
 
 
 
-function armarArrayDatosPago(){
+function armarArrayDatosPago(pasajeros){
     const datos = {
-        "documento": document.getElementById("documento").value,
-        "apellidos": document.getElementById("apellidos").value,
-        "nombres": document.getElementById("nombres").value,
-        "email": document.getElementById("correo").value,
-        "celular": document.getElementById("celular").value,
-        "valor": parseFloat(precio)
-        // "valor": 3500
+        "documento": document.getElementById("ciFacturacion").value,
+        "apellidos": document.getElementById("apellidoFacturacion").value,
+        "nombres": document.getElementById("nombreFacturacion").value,
+        "email": document.getElementById("correoFacturacion").value,
+        "celular": document.getElementById("telefonoFacturacion").value,
+        "valor": parseFloat(precio),
+        "pasajeros": pasajeros
         
     }
     return datos
@@ -340,6 +341,8 @@ function recibirCotizacion(id){
                 precio = datos.consulta.precio.totalPaquete.valor
                 ponerCosto(datos.consulta.precio)
                 armarVuelos(datos.consulta.origen, datos.consulta.destino,datos.consulta.salida,datos.consulta.retorno)
+                construirCards(personas)
+                copiarCards()
                 $("#detalles").show()
                 if(id){
                     Swal.fire({
@@ -368,6 +371,32 @@ function recibirCotizacion(id){
         })
     }
     
+}
+
+
+function copiarCards(){
+    document.getElementById("nombreFacturacion").value = document.getElementById("nombres").value
+    document.getElementById("apellidoFacturacion").value = document.getElementById("apellidos").value
+    document.getElementById("correoFacturacion").value = document.getElementById("correo").value
+    document.getElementById("telefonoFacturacion").value = document.getElementById("celular").value
+
+}
+
+
+
+
+function transformarAPersonasArray(personas) {
+    let personasArray = [];
+
+    // Recorremos el objeto
+    for (let tipo in personas) {
+        // Agregamos el número de personas de cada tipo al array
+        for (let i = 0; i < personas[tipo]; i++) {
+            personasArray.push(tipo);
+        }
+    }
+
+    return personasArray;
 }
 
 
@@ -470,7 +499,7 @@ function ponerCosto(precio){
         $("#botonPagarAhora2").show()
         $("#botonPagarAhora1").show()
     }
-    $("#costos").html(lista)
+    $("#costos2").html(lista)
 }
 
 
@@ -478,7 +507,7 @@ function armarVuelos(origen, destino, salida, retorno){
     const aux = 156
     let lista = ""
         lista += `
-            <div class="strip_all_tour_list wow fadeIn" data-wow-delay="0.1s">
+            
                 <div class="row">
                         <div class="row my-1 mx-1">
                             <div class="col-lg-6 d-flex" style="align-items: center;">
@@ -501,7 +530,7 @@ function armarVuelos(origen, destino, salida, retorno){
                         </div>
                     </div>
                 </div>
-            </div>
+            
         `
    
     $("#detalleVuelos").html(lista)
@@ -604,6 +633,243 @@ function plasmarVuelosDom(vuelo, tipo){
 
 
 
+function construirCards(personasArray){
+    const descripciones = {
+        adultos: 'Adulto',
+        ninos: 'Niño',
+        infante: 'Infante'
+    };
+    var personas = Object.entries(personasArray);
+    personas.forEach(([clave, valor],index) => {
+        const numero = parseInt(valor, 10); 
+        if (numero > 0) { // Solo imprimir si el valor es mayor a 0
+            const descripcion = descripciones[clave] || clave; // Obtener la descripción o usar la clave como fallback
+            for (let i = 1; i <= numero; i++) {
+                var lista = `
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h4 class="card-title mb-3">${descripcion} ${i}</h4>
+                                </div>
+                                <div class="col-6" style ="display: flex; justify-content: end;">
+                                    <a data-bs-toggle="collapse" href="#card${index}${i}" role="button" aria-expanded="false" aria-controls="cardCollpase1"><i class="mdi mdi-minus" style="font-size:30px"></i></a>
+                                </div>        
+                            </div>
+                            <div id="card${index}${i}" class="collapse show">
+                                <div class="row">
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="simpleinput" class="form-label" id="nombres${index}${i}_">Nombres</label>
+                                        <input type="text" id="nombres${index}${i}" class="form-control" placeholder="Ingrese los nombres">
+                                    </div>
+
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="simpleinput" class="form-label" id="apellidos${index}${i}_">Apellidos</label>
+                                        <input type="text" id="apellidos${index}${i}" class="form-control" placeholder="Ingrese los apellidos">
+                                    </div>
+
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="example-select" class="form-label">Género</label>
+                                        <select class="form-select" id="genero${index}${i}">
+                                            <option value="M">Masculino</option>
+                                            <option value="F">Femenino</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="example-select" class="form-label">Tipo de Documento de Identidad</label>
+                                        <select class="form-select" id="tipoDocumento${index}${i}">
+                                            <option value="CI">Cédula de Identidad</option>
+                                            <option value="TP">Pasaporte</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="simpleinput" class="form-label" id="numDocumento${index}${i}_">Número de Documento de Identidad</label>
+                                        <input type="text" id="numDocumento${index}${i}" class="form-control" placeholder="Ingrese el número de documento">
+                                    </div>
+
+                                <div class="col-lg-6 mb-3">
+                                    <label for="example-date" class="form-label" id="fechaNacimiento${index}${i}_">Fecha de Nacimiento</label>
+                                    <input class="form-control" id="fechaNacimiento${index}${i}" type="text" autocomplete="off" placeholder="Fecha de nacimiento" style=" background-color: white;">
+                                </div>
+
+                            
+                                <div class="col-lg-6 mb-3">
+                                    <label for="example-date" class="form-label" id="fechaCaducidad${index}${i}_">Fecha de caducidad</label>
+                                    <input class="form-control" id="fechaCaducidad${index}${i}" type="text" placeholder="Fecha de caducidad del documento de identidad" autocomplete="off" style=" background-color: white;">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+
+                $('#informacionClientes').append(lista)
+                iniciarDatePickers(index, i, clave)
+            }
+        }
+    });
+}
+
+
+function iniciarDatePickers(index, i, descripcion){
+    let today = new Date();
+    let minDate = new Date();
+    if(descripcion == "adultos"){
+        minDate.setFullYear(today.getFullYear() - 64);
+        minDate.setMonth(today.getMonth() - 11);
+
+        // Calcula la fecha máxima permitida (12 años antes de hoy)
+        let maxDate = new Date();
+        maxDate.setFullYear(today.getFullYear() - 12);
+
+        // Inicializa Flatpickr para el input con ID dinámico
+        flatpickr(`#fechaNacimiento${index}${i}`, {
+            dateFormat: "Y-m-d",
+            minDate: minDate.toISOString().split('T')[0], // Convierte la fecha mínima a formato YYYY-MM-DD
+            maxDate: maxDate.toISOString().split('T')[0], // Convierte la fecha máxima a formato YYYY-MM-DD
+            disableMobile: true // Opcional: evita que el selector se convierta en un selector móvil
+        });
+
+    }else if(descripcion == "ninos"){
+        minDate.setFullYear(today.getFullYear() - 11);
+        minDate.setMonth(today.getMonth() - 11);
+
+        // Calcula la fecha máxima permitida (2 años antes de hoy)
+        let maxDate = new Date();
+        maxDate.setFullYear(today.getFullYear() - 2);
+
+        // Inicializa Flatpickr para el input con ID dinámico
+        flatpickr(`#fechaNacimiento${index}${i}`, {
+            dateFormat: "Y-m-d",
+            minDate: minDate.toISOString().split('T')[0], // Convierte la fecha mínima a formato YYYY-MM-DD
+            maxDate: maxDate.toISOString().split('T')[0], // Convierte la fecha máxima a formato YYYY-MM-DD
+            disableMobile: true // Opcional: evita que el selector se convierta en un selector móvil
+        });
+
+    }else if(descripcion == "infante"){
+        minDate.setFullYear(today.getFullYear() - 1);
+        minDate.setMonth(today.getMonth() - 11);
+        flatpickr(`#fechaNacimiento${index}${i}`, {
+            minDate: minDate.toISOString().split('T')[0], // Convierte la fecha mínima a formato YYYY-MM-DD
+            maxDate: today.toISOString().split('T')[0],
+            dateFormat: "Y-m-d",
+            disableMobile: true // Opcional: evita que el selector se convierta en un selector móvil
+        }) 
+
+    }
+
+    flatpickr(`#fechaCaducidad${index}${i}`, {
+        dateFormat: "Y-m-d",
+        disableMobile: true 
+    })     
+}
+
+
+
+
+function hacerReserva(){
+    let datosReserva =  {
+            // origin: info.vueloIda,
+            // destination: info.vueloVuelta,
+            passengers: []
+        }
+    let vuelosArray = {
+        vuelos:[]
+    }
+    let aux=true  
+    let texto = ""
+    let people = Object.entries(personas);
+    people.forEach(([clave, valor],index) => {
+        const numero = parseInt(valor, 10); 
+        if (numero > 0) { // Solo imprimir si el valor es mayor a 0
+            for (let i = 1; i <= numero; i++) {
+                var tipo = ""
+                if(clave == "adultos"){
+                    tipo = "ADT"
+                }else if(clave == "ninos"){
+                    tipo = "CHD"
+                }else if(clave == "infante"){
+                    tipo = "INF"
+                }
+                
+                var nacimiento = formatDateToDMY(document.getElementById("fechaNacimiento"+index+i).value)
+                let newPassenger = {
+                    birth: nacimiento,
+                    document:{
+                        number: document.getElementById("numDocumento"+index+i).value,
+                        type: document.getElementById("tipoDocumento"+index+i).value,
+                        issuing_country: "EC",
+                        valid_thru: document.getElementById("fechaCaducidad"+index+i).value
+
+                    },
+                    firstname: document.getElementById("nombres"+index+i).value,
+                    lastname: document.getElementById("apellidos"+index+i).value,
+                    gender: document.getElementById("genero"+index+i).value,
+                    nationality: "EC",
+                    type: tipo
+                }
+                datosReserva.passengers.push(newPassenger);
+                texto += validarDato("fechaNacimiento"+index+i);
+                texto += validarDato("numDocumento"+index+i);
+                texto += validarDato("fechaCaducidad"+index+i);
+                texto += validarDato("nombres"+index+i);
+                texto += validarDato("apellidos"+index+i);
+                if(
+                    !newPassenger.birth || !newPassenger.firstname || !newPassenger.lastname || 
+                    !newPassenger.gender || !newPassenger.document.number || !newPassenger.document.type || !newPassenger.document.valid_thru 
+                ){
+                    aux = false
+                }
+            }
+        }
+    });
+    vuelosArray.vuelos.push(datosReserva)
+    if(aux){
+        realizarReserva(vuelosArray)
+    }else{
+        Swal.fire({
+                icon: 'info',
+                title: 'Mensaje:',
+                text: 'Debe llenar los campos '+texto,
+                confirmButtonText: 'Entendido'
+            })
+    }
+}
+
+
+
+function validarDato(idCampo){
+    let value = document.getElementById(idCampo).value
+    let texto = ""
+    if(!value){
+        document.getElementById(idCampo+"_").classList.add("text-danger")
+        texto = document.getElementById(idCampo+"_").textContent;
+        document.getElementById(idCampo+"_").textContent = texto+"*"
+        texto += ", "
+    }else{
+        document.getElementById(idCampo+"_").classList.remove("text-danger")
+        let aux= document.getElementById(idCampo+"_").textContent.slice(0,-1);
+        document.getElementById(idCampo+"_").textContent = aux
+    }
+    return texto
+}
+
+function formatDateToDMY(dateString) {
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
+}
+
+
+
+function realizarReserva(datosReserva){
+    console.log(datosReserva)
+    pagar(datosReserva.vuelos[0].passengers)
+}
+
+
+
 
 
 function sacarLogoAereolina(code){
@@ -677,4 +943,26 @@ function validarDiezDigitos(input){
     if (input.value.length > 10) {
         input.value = input.value.slice(0, 10); // Limita a 10 caracteres
     }
+}
+
+
+function showTab(tabId) {
+    var tab = new bootstrap.Tab(document.getElementById(tabId));
+    tab.show();
+}
+
+function avanzarTab1() {
+    showTab('profile-tab'); // Avanza a "TUS TICKETS AÉREOS"
+}
+
+function retroceder1() {
+    showTab('home-tab'); // Retrocede a "TU PAQUETE"
+}
+
+function avanzarTab2() {
+    showTab('contact-tab'); // avanzar a "Reservar"
+}
+
+function retroceder2() {
+    showTab('profile-tab'); // Avanza a "TUS TICKETS AÉREOS"
 }

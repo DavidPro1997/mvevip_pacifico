@@ -44,49 +44,16 @@
         t.src=v;s=b.getElementsByTagName(e)[0];
         s.parentNode.insertBefore(t,s)}(window, document,'script',
         'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '466024262530871');
+        fbq('init', '1063718038581033');
         fbq('track', 'PageView');
     </script>
     <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=466024262530871&ev=PageView&noscript=1"
-    /></noscript>
+        src="https://www.facebook.com/tr?id=1063718038581033&ev=PageView&noscript=1" />
+    </noscript>
     <!-- End Meta Pixel Code -->
        
 </head>
 
-
- <!-- Standard modal content -->
- <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="standard-modalLabel">Ingrese la información</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label><i class="icon-vcard" style="font-size: 22px;"></i>Documento</label>
-                        <input type="number" id="documento" class="form-control" placeholder="Escriba su documento de identidad" oninput="validarDiezDigitos(this)">
-                    </div>
-                </div>
-            </div>
-            <div class="row" style="display: none;" id="spinner">
-                <div class="col-12" style="display: flex; align-items: center; justify-content: center;" id="pagando">
-                    <div class="spinner-border m-2" role="status" style="color: #99c21c;">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-            </div>
-            <br>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn_1" style="background-color: #99c21c; color: white;" onclick="pagar()" >Ir a pagar</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
 
 <style>
@@ -147,7 +114,7 @@
     </div>
     <!-- End Preload -->
 
-    <div class="layer"></div>
+    <!-- <div class="layer"></div> -->
     <!-- Mobile menu overlay mask -->
 
     <!-- Header================================================== -->
@@ -160,7 +127,6 @@
                             <i class="fab fa-whatsapp" style="margin-right: 5px;"></i><strong>+593958779595</strong></div>
                         </a>
                     <div class="col-6">
-                        
                     </div>
                 </div><!-- End row -->
             </div><!-- End container-->
@@ -169,16 +135,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-3">
-                    <div id="logo_home">
-                    	<h1><a href="index.html" title="Marketing Vip travel template">Marketing Vip Landing</a></h1>
-                    </div>
+                    <div id="logo">
+						<a href="index.html"><img src="img/logo.png" width="160" height="34" alt="City tours" class="logo_normal"></a>
+						<a href="index.html"><img src="img/logo_sticky.png" width="160" height="34" alt="City tours" class="logo_sticky"></a>
+					</div>
                 </div>
                 <nav class="col-9">
-                    <div class="main-menu">
-                        <div id="header_menu">
-                            <img src="img/logo.png" width="160" height="34" alt="Marketing Vip">
-                        </div>
-                    </div><!-- End main-menu -->
                     <div class="row" id="headerPago" style="display: none;">
                         <div class="col-12" style="display: flex; align-items: end; justify-content: end;">
                             <a href="#" class="show-submenu" onclick="verificarPago(); return false"  style="text-decoration: none; color: black; background-color: transparent;">
@@ -186,16 +148,14 @@
                             </a>
                         </div>
                     </div>
-                    
-
                 </nav>
             </div>
         </div><!-- container -->
 
     </header><!-- End Header -->
 
-    <section class="parallax-window" data-parallax="scroll" data-image-src="img/slides_bg/slide_1.jpg" data-natural-width="1400" data-natural-height="400">
-		<div class="parallax-content-1 " >
+    <section class="parallax-window" data-parallax="scroll" data-image-src="img/slides_bg/slide_1.jpg" data-natural-width="1400" data-natural-height="360">
+		<div class="parallax-content-1 ">
 		</div>
 	</section>
     
@@ -204,8 +164,8 @@
     
 	
     <div class="container margin_60">
-    
         <div class="main_title">
+            <br>
             <h2>Viaja con <span>Marketing Vip</span></h2>
             <p>¡Explora los Mejores Destinos a los Mejores Precios!</p>
         </div>
@@ -255,8 +215,8 @@
                                 <div class="form-group">
                                     <label><i class="icon-calendar" style="font-size: 22px;"></i>Fecha de salida</label>
                                     <input type="text" id="fechaSalida" class="form-control" placeholder="Elige su fecha de salida" 
-                                        style="background-color: white; text-align: center; font-size: 15px;" readonly 
-                                        onfocus="this.removeAttribute('readonly');" onblur="this.setAttribute('readonly', true);" />
+                                        style="background-color: white;" readonly 
+                                        onfocus="this.removeAttribute('readonly');" onblur="this.setAttribute('readonly', true);" autocomplete="off"/>
                                 </div>
                             </div>
                             
@@ -264,12 +224,12 @@
                                 <div class="form-group">
                                     <label><i class="icon-group" style="font-size: 22px;"></i>Personas</label>
                                     <div class="dropdown" style="width: 100%; position: relative; overflow: visible;"  id="dropdownPersonas">
-                                        <input type="text" id="personas" name="firstname_booking" id="autocomplete" placeholder="4 PERSONAS" class="form-control dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" autocomplete="off" data-bs-display="static" style="font-size: 16px; text-align: center; background-color: white;" readonly  onfocus="this.nextElementSibling.classList.add('show')">
+                                        <input type="text" id="personas" name="firstname_booking" id="autocomplete" placeholder="Eliga el número de personas" class="form-control dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" autocomplete="off" data-bs-display="static" style="background-color: white;" readonly  onfocus="this.nextElementSibling.classList.add('show')">
                                         <div class="dropdown-menu" style="width: 100%; max-height: 50vh; overflow-y: auto; overflow: visible;" id="dropdownPersonasContent">
                                             <div class="row" style="margin-left: 15px; margin-right: 5px; align-items: center;">
                                                 <div class="col-lg-6 col-sm-12">
                                                     <span>Adultos</span>
-                                                    <input type="number" value="4" id="numeroAdulto" class="form-control" min="1" max="10" style="width: 70%; font-size: 18px; text-align: center;" oninput="validarRango(this)" autocomplete="off">
+                                                    <input type="number" value="1" id="numeroAdulto" class="form-control" min="1" max="10" style="width: 70%; font-size: 18px; text-align: center;" oninput="validarRango(this)" autocomplete="off">
                                                 </div>
                                                 <div class="col-lg-6 col-sm-12">
                                                     <span>Niños <span style="font-size: 10px;">2-11 años</span></span>
@@ -336,100 +296,217 @@
     </div><!-- End container -->
     
         <div class="white_bg" id="detalles" style="display: none;">
-			<div class="container margin_60">
-				<div class="main_title">
-					<h2>TU PAQUETE <span>INCLUYE</span></h2>
-				</div>
-                <div class="checkout-page">
-                    <div class="row">
-                        <div class="col-lg-7">
-                            <div class="row add_bottom_45">
-                                <div class="default-title">
-                                    <h2>TU PAQUETE</h2>
-                                </div>
-                                <div class="col-lg-6 other_tours">
-                                    <ul>
-                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_2_icon-102"></i>4 Días<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
-                                        </li>
-                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_2_icon-102"></i>3 Noches<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
-                                        </li>
-                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_2_icon-104"></i>Habitación Estandar<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
-                                        </li>
-                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_2_icon-106"></i>Microondas<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
-                                        </li>
-                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_1_icon-59"></i>Desayunos<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
-                                        </li>
-                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_1_icon-21"></i>Transfer In<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
-                                        </li>
-                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_1_icon-21"></i>Tranfer Out<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
-                                    </ul>
-                                </div>
-                                <div class="col-lg-6 other_tours">
-                                    <ul>
-                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_1_icon-8"></i>Cafetera<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
-                                        </li>
-                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_2_icon-117"></i>Gymnasio<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
-                                        </li>
-                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_2_icon-118"></i>Spa<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
-                                        </li>
-                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_1_icon-62"></i>Wi-Fi<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
-                                        </li>
-                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_2_icon-110"></i>Piscina<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
-                                        </li>
-                                        <li><a class="accordion-toggle" data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapseOne_payment"><i class="icon_set_1_icon-4"></i>Tour Castillo San Felipe (inc. entradas)<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
-                                            <div id="collapseOne_payment" class="collapse" data-bs-parent="#accordion">
-                                                <div class="card-body">
-                                                    Se trata de una espectacular fortaleza que se construyó durante la colonización española. Es considerado como el complejo militar más grande de todos los que se construyeron, por aquel entonces, en América. Tal es su importancia histórica y cultural que este Castillo de San Felipe fue declarado, en el año 1984, Patrimonio de la Humanidad por la UNESCO. Y no solamente esta edificación, sino también las otras fortificaciones que podemos encontrar en Cartagena de Indias.                                                
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li><a class="accordion-toggle" data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapseTwo_payment"><i class="icon_set_1_icon-26"></i>Tour por la ciudad en chiva<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
-                                            <div id="collapseTwo_payment" class="collapse" data-bs-parent="#accordion">
-                                                <div class="card-body">
-                                                    Divertido tour panorámico nocturno Chiva Rumbera en Cartagena con música y bar de ron nacional a bordo de un divertido bus típico y colorido.
-                                                    Tour Chiva Rumbera en Cartagena es un recorrido de tres horas alegres con animación de música en vivo por las principales calles y avenidas.                                            
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!--End Col-->
-        
-                        <div class="col-lg-5">
-                            <div class="your-order">
-                                <div class="default-title">
-                                    <h2>Resumen de Costos Cartagena + Ticket Aéreo</h2>
-                                </div>
-                                <ul class="orders-table" id="costos">
-                                    
-                                </ul>
-                                <div style="text-align: center; display: flex; align-items: center; justify-content: center;">
-                                    <button type="button" class="btn_1" style="background-color: #99c21c; margin-right: 10px;" data-bs-toggle="modal" data-bs-target="#standard-modal" id="botonPagarAhora1">Pagar Ahora <i class="icon-credit-card"></i>
-                                    </button>
-                                    <button type="button" class="btn_1" style="background-color: #99c21c;" onclick="masInformacion()">Más Información <i class="fab fa-whatsapp"></i></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <br>
+			<div class="container margin_60">
+
                 <div class="main_title">
-					<h2>TUS TICKETS <span>AEREOS</span></h2>
-				</div>
+					<h2>¡DISFRUTA DE UN VIAJE <span>INOLVIDABLE!</span></h2>
+					<p>
+                        Explora destinos únicos y crea recuerdos que durarán para siempre.	
+                    </p>			
+                </div>
 
                 <div class="row">
-                    <div id="detalleVuelos">
+                    <div class="col-md-8">
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#paquete" role="tab" aria-controls="home" aria-selected="true"><h7><strong>TU PAQUETE</strong></h7></a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#ticktes" role="tab" aria-controls="profile" aria-selected="false"><h7><strong>TUS TICKETS AÉREOS</strong></h7></a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#reservar" role="tab" aria-controls="contact" aria-selected="false"><h7><strong>RESERVAR</strong></h7></a>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="paquete" role="tabpanel" aria-labelledby="home-tab" style="position: relative;">
+                                <div class="main_title">
+                                    <h3>TU PAQUETE <span>INCLUYE</span></h3>
+                                </div>
+                                <div class="checkout-page">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="row add_bottom_45">
+                                                <div class="col-lg-6 other_tours">
+                                                    <ul>
+                                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_1_icon-51"></i>Ticket aéreo<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
+                                                        </li>
+                                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_2_icon-102"></i>4 Días<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
+                                                        </li>
+                                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_2_icon-102"></i>3 Noches<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
+                                                        </li>
+                                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_2_icon-104"></i>Habitación Estandar<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
+                                                        </li>
+                                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_1_icon-59"></i>Desayunos<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
+                                                        </li>
+                                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_1_icon-21"></i>Transfer In<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
+                                                        </li>
+                                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_1_icon-21"></i>Tranfer Out<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-lg-6 other_tours">
+                                                    <ul>
+                                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_1_icon-8"></i>Cafetera<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
+                                                        </li>
+                                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_2_icon-117"></i>Gymnasio<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
+                                                        </li>
+                                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_2_icon-118"></i>Spa<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
+                                                        </li>
+                                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_1_icon-62"></i>Wi-Fi<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
+                                                        </li>
+                                                        <li><a href="#" onclick="event.preventDefault();"><i class="icon_set_2_icon-110"></i>Piscina<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
+                                                        </li>
+                                                        <li><a class="accordion-toggle" data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapseOne_payment"><i class="icon_set_1_icon-4"></i>Tour Castillo San Felipe (inc. entradas)<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
+                                                            <div id="collapseOne_payment" class="collapse" data-bs-parent="#accordion">
+                                                                <div class="card-body">
+                                                                    Se trata de una espectacular fortaleza que se construyó durante la colonización española. Es considerado como el complejo militar más grande de todos los que se construyeron, por aquel entonces, en América. Tal es su importancia histórica y cultural que este Castillo de San Felipe fue declarado, en el año 1984, Patrimonio de la Humanidad por la UNESCO. Y no solamente esta edificación, sino también las otras fortificaciones que podemos encontrar en Cartagena de Indias.                                                
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li><a class="accordion-toggle" data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapseTwo_payment"><i class="icon_set_1_icon-26"></i>Tour por la ciudad en chiva<span class="other_tours_price"><i class="icon_set_1_icon-76" style="color: #99c21c;"></i></span></a>
+                                                            <div id="collapseTwo_payment" class="collapse" data-bs-parent="#accordion">
+                                                                <div class="card-body">
+                                                                    Divertido tour panorámico nocturno Chiva Rumbera en Cartagena con música y bar de ron nacional a bordo de un divertido bus típico y colorido.
+                                                                    Tour Chiva Rumbera en Cartagena es un recorrido de tres horas alegres con animación de música en vivo por las principales calles y avenidas.                                            
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="animated fadeInDown col-6">
+                                   </div>
+                                    <div class="animated fadeInDown col-6" style="display: flex; align-items: end; justify-content: end;">
+                                        <button onclick="avanzarTab1()" class="btn_1 green" style="background-color: #99c21c;">
+                                            Tus Tickets
+                                            <i class="icon-left"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="tab-pane fade" id="ticktes" role="tabpanel" aria-labelledby="profile-tab">
+                                <div class="main_title">
+                                    <h3>TUS TICKETS <span>AEREOS</span></h3>
+                                </div>
+                                <div class="row">
+                                    <div id="detalleVuelos">
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="animated fadeInDown col-6">
+                                        <button onclick="retroceder1()" class="btn_1 green" style="background-color: #99c21c;">
+                                            <i class="icon-right"></i>
+                                            Tu paquete
+                                        </button>	
+                                    </div>
+                                    <div class="animated fadeInDown col-6" style="display: flex; align-items: end; justify-content: end;">
+                                        <button onclick="avanzarTab2()" class="btn_1 green" style="background-color: #99c21c;">
+                                            Reservar
+                                            <i class="icon-left"></i>
+                                        </button>	
+                                    </div>
+                                </div>
+                            </div>
+    
+    
+                            <div class="tab-pane fade" id="reservar" role="tabpanel" aria-labelledby="contact-tab">
+                                <div class="main_title">
+                                    <h3>¡ESCOGE TU FECHA DE <span>VIAJE!</span></h3>
+                                </div>
+                                <div id="informacionClientes">
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h4 class="card-title mb-3">Datos factura</h4>
+                                            </div>
+                                            <div class="col-6" style ="display: flex; justify-content: end;">
+                                                <a data-bs-toggle="collapse" href="#card" role="button" aria-expanded="false" aria-controls="cardCollpase1"><i class="mdi mdi-minus" style="font-size:30px"></i></a>
+                                            </div>        
+                                        </div>
+                                        <div id="card" class="collapse show">
+                                            <div class="row">
+                                                
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="simpleinput" class="form-label">Nombre</label>
+                                                    <input type="text" id="nombreFacturacion" class="form-control" placeholder="Ingrese su nombre">
+                                                </div>
+
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="simpleinput" class="form-label">Apellidos</label>
+                                                    <input type="text" id="apellidoFacturacion" class="form-control" placeholder="Ingrese su apellido">
+                                                </div>
+                
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="simpleinput" class="form-label">CI/RUC</label>
+                                                    <input type="text" id="ciFacturacion" class="form-control" placeholder="Ingrese su número de documento">
+                                                </div>
+                
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="simpleinput" class="form-label">Correo</label>
+                                                    <input type="text" id="correoFacturacion" class="form-control" placeholder="Ingrese su correo">
+                                                </div>
+                
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="simpleinput" class="form-label">Telefono</label>
+                                                    <input type="text" id="telefonoFacturacion" class="form-control" placeholder="Ingrese su telefono">
+                                                </div>
+                
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="simpleinput" class="form-label">Dirección</label>
+                                                    <input type="text" id="direccionFacturacion" class="form-control" placeholder="Ingrese su dirección">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="animated fadeInDown col-6">
+                                        <button onclick="retroceder2()" class="btn_1 green" style="background-color: #99c21c;">
+                                            <i class="icon-right"></i>
+                                            Tus Tickets
+                                        </button>	
+                                    </div>
+                                    <div class="animated fadeInDown col-6" style="display: flex; align-items: end; justify-content: end;">
+                                        <button type="button" class="btn_1" style="background-color: #99c21c; margin-right: 10px;" id="botonPagarAhora2" onclick="hacerReserva()">Pagar Ahora <i class="icon-credit-card"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
+    
+    
+    
+                    <div class="col-md-4">
+                        <div class="checkout-page">
+                            <div class="row">
+                                <div class="your-order">
+                                    <div class="default-title">
+                                        <h2>Resumen de Costos Cartagena + Ticket Aéreo</h2>
+                                    </div>
+                                    <ul class="orders-table" id="costos2">
+                                        
+                                    </ul>
+                                    <div style="text-align: center; display: flex; align-items: center; justify-content: center;">
+                                        <button type="button" class="btn_1" style="background-color: #99c21c;" onclick="masInformacion()">Más Información <i class="fab fa-whatsapp"></i></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <br><br><br>
-
-
-
+                
                 <div class="main_title">
 					<h2>¡DISFRUTA DE UN VIAJE <span>INOLVIDABLE!</span></h2>
 					<p>
@@ -445,38 +522,6 @@
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                         allowfullscreen>
                     </iframe>
-                </div>
-
-                <!-- <div class="banner_2" style="width: auto;">
-                    <div class="wrapper d-flex align-items-center opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.3)"
-                        style="background-color: rgba(0, 0, 0, 0.3); width: auto;">
-                        <iframe 
-                                src="https://www.youtube.com/embed/2RXs7TtPM1s?autoplay=1&mute=1&loop=1&playlist=2RXs7TtPM1s" 
-                                title="YouTube video player" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                allowfullscreen
-                                style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; transform: translate(-50%, -50%) scale(1);">
-                        </iframe>
-                    </div>
-                </div> -->
-
-                <br><br><br>
-                <div class="main_title">
-					<h2>¡ESCOGE TU FECHA DE <span>VIAJE!</span></h2>
-					<p>
-                        Tu viaje comienza con una simple elección.	
-                    </p>			
-                </div>
-
-
-                <div class="row">
-                    <div style="text-align: center; display: flex; align-items: center; justify-content: center;">
-                        <button type="button" class="btn_1" style="background-color: #99c21c; margin-right: 10px;" data-bs-toggle="modal" data-bs-target="#standard-modal" id="botonPagarAhora2">Pagar Ahora <i class="icon-credit-card"></i>
-                        </button>
-                        <button type="button" class="btn_1" style="background-color: #99c21c;" onclick="masInformacion()">Más Información <i class="fab fa-whatsapp"></i></i>
-                        </button>
-                    </div>
                 </div>
 
 			</div>
